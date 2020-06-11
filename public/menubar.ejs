@@ -1,0 +1,50 @@
+<div class="container">
+    <ul class="nav page-navigation">
+        <li class="nav-item">
+            <a class="nav-link" href="/">
+                <i class="mdi mdi-file-document-box menu-icon"></i>
+                <span class="menu-title">หน้าแรก</span>
+            </a>
+        </li>
+        <%  if(level==2 || level==3){%> 
+        <li class="nav-item">
+            <a class="nav-link" href="/student">
+                <i class="mdi mdi-account-multiple menu-icon"></i>
+                <span class="menu-title">โครงการ</span>
+            </a>
+        </li>
+        <%  }%> 
+        <%  if(level==3){%> 
+        <li class="nav-item">
+            <a class="nav-link" href="/group">
+                <i class="mdi mdi-account-box menu-icon"></i>
+                <span class="menu-title">จัดการกลุ่มกรรมการ</span>
+            </a>
+        </li>
+        <%  }%> 
+        <%  if(level==3){%> 
+        <li class="nav-item">
+            <a class="nav-link" href="/time">
+                <i class="mdi mdi-timer menu-icon"></i>
+                <span class="menu-title">จัดการตารางสอบ</span>
+            </a>
+        </li>
+        <%  }%> 
+        <%  if(level==3){%> 
+        <li class="nav-item">
+            <a class="nav-link" href="/professor">
+                <i class="mdi mdi-account-switch menu-icon"></i>
+                <span class="menu-title">จัดการพนักงาน</span>
+            </a>
+        </li>
+        <%  }%> 
+        <%  if(level==2){%> 
+        <li class="nav-item">
+            <a class="nav-link" href="/comment">
+                <i class="mdi mdi-comment menu-icon"></i>
+                <span class="menu-title">จัดการผลการสอบ</span>
+            </a>
+        </li>
+        <%  }%> 
+    </ul>
+</div>

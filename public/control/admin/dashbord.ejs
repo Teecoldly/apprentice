@@ -1,0 +1,41 @@
+<div class="row mt-3">
+    <div class="col-lg-12 d-flex grid-margin stretch-card text-center">
+        <div class="card sale-pink">
+            <div class="card-body">
+                <h2 class="text-dark mb-2 font-weight-bold"><span  style=" color:yellow ;">   <i class="fas fa-calendar"></i></span> <span id="textsemester"> </span> <a href="#"  class="text-decoration-none"> 
+                  <% if(level==3){ %>
+                  
+                  <i class="fas fa-edit"  data-toggle="modal" data-target="#edit-year" id="year-edit-open"></i>
+                  <% } %>
+                
+                </a></h2>
+                <h4 class="card-title mb-2">ปีการศึกษา</h4>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="edit-year" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">แก้ไข ปีการศึกษา</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group row">
+                <label for="name_reg" class="col-sm-3 col-form-label">ปีการศึกษา</label>
+                <div class="col-sm-9">
+                  <input type="number" class="form-control" id="year-id" placeholder="กำหนดปีการศึกษา">
+                </div>
+              </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">ยกเลิก</button>
+          <button type="button" class="btn btn-primary" id="semester_save">บันทึก</button>
+        </div>
+      </div>
+    </div>
+  </div>
+<script src="/control/admin/dashbord.js"></script>

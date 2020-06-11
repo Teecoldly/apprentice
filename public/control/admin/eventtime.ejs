@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title><%- include("../../title.ejs") %> </title>
+    <!-- base:css -->
+    <link rel="stylesheet" href="/vendors/mdi/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="/vendors/base/vendor.bundle.base.css">
+    <!-- endinject -->
+    <!-- plugin css for this page -->
+    <!-- End plugin css for this page -->
+    <!-- inject:css -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- endinject -->
+
+    <link rel="shortcut icon" href="/images/favicon.png" />
+    <link href="/fonts/fontawesome-free-5.13.0-web/css/fontawesome.css" rel="stylesheet">
+    <link href="/fonts/fontawesome-free-5.13.0-web/css/brands.css" rel="stylesheet">
+    <link href="/fonts/fontawesome-free-5.13.0-web/css/solid.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
+    
+    <script src="/js/jquery.js"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+    <script src="/control/admin/eventtime.js"></script>
+
+
+    <style>
+        td {
+        word-break: break-all;
+        }
+        .sale-red:after {
+            content: '';
+            height: 5px;
+            width: 100%;
+            border-radius: 0 0 6px 6px;
+            background-color: red;
+            position: absolute;
+            left: 0;
+            bottom: 0;
+        }
+
+        .sale-pink:after {
+            content: '';
+            height: 5px;
+            width: 100%;
+            border-radius: 0 0 6px 6px;
+            background-color: pink;
+            position: absolute;
+            left: 0;
+            bottom: 0;
+        }
+
+        .sale-green:after {
+            content: '';
+            height: 5px;
+            width: 100%;
+            border-radius: 0 0 6px 6px;
+            background-color: green;
+            position: absolute;
+            left: 0;
+            bottom: 0;
+        }
+
+        .sale-black:after {
+            content: '';
+            height: 5px;
+            width: 100%;
+            border-radius: 0 0 6px 6px;
+            background-color: black;
+            position: absolute;
+            left: 0;
+            bottom: 0;
+        }
+        .locksize {
+         width: 20%;
+        min-width: 20em; /* Will be AT LEAST 20em wide */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-scroller">
+
+        <!-- partial:partials/_horizontal-navbar.html -->
+        <div class="horizontal-menu">
+            <nav class="navbar top-navbar col-lg-12 col-12 p-0">
+                <div class="container-fluid">
+                    <div class="navbar-menu-wrapper d-flex align-items-center justify-content-between">
+                        <ul class="navbar-nav navbar-nav-left">
+                            <div
+                                class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
+                                <a class="navbar-brand brand-logo" href="/">CRS System</a>
+								<a class="navbar-brand brand-logo-mini" href="/"> CRS System</a>
+                            </div>
+                        </ul>
+                        <%- include('../../nav_user',{name:name}) %>
+
+                        <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button"
+                            data-toggle="horizontal-menu-toggle">
+                            <span class="mdi mdi-menu"></span>
+                        </button>
+                    </div>
+                </div>
+            </nav>
+            <nav class="bottom-navbar">
+                <%- include('../../menubar',{level:level}) %> 
+            </nav>
+        </div>
+        <!-- partial -->
+        <div class="container-fluid page-body-wrapper">
+            <div class="main-panel">
+                <div class="content-wrapper">
+                    <div class="row mt-3">
+                        <div class="col-lg-12 grid-margin stretch-card">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4 class="card-title">ตารางสอบ
+                                        <div class="float-right mr-auto">
+
+                                            <button type="button" class="btn btn-info" data-toggle="modal"
+                                                data-target="#eventtime_add"><i class="fas fa-bell"></i></button>
+                                        </div>
+                                    </h4>
+
+                                    <p class="card-description">
+                                        จัดการตารางการสอบ
+                                    </p>
+                                    <div class="table-responsive">
+                                        <table class="table table-striped text-center " id="event-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>
+                                                        ลำดับเหตุการณ์
+                                                    </th>
+                                                    <th>
+                                                        คำอธิบาย
+                                                    </th>
+                                                    <th>
+                                                        วันเวลา
+                                                    </th>
+                                                    <th>
+                                                        กลุ่มผู้จอง
+                                                    </th>
+                                                    <th>
+                                                        ที่ปรึกษา
+                                                    </th>
+                                                    <th>
+                                                        การดำเนินการ
+                                                    </th>
+                                                    <th>
+                                                        เครื่องมือ
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <%
+                                                function difftime(diff_number) {
+                                                        let time= diff_number/1000;
+                                                        if( parseInt(time=time/60)<=0){
+                                                            return "<span class='text-success'>สิ้นสุดลงแล้ว </span>"
+                                                        }else if (parseInt(time)>=0 && parseInt(time)<=15){
+                                                            return "<span class='text-warning'>กำลังดำเนินการ </span>"
+                                                        } else {
+                                                            
+                                                            return "<span class='text-primary'>รอการดำเนินการ </span>"
+                                                            
+                                                        }
+                                                }
+                                                function getstatus(diff_number) {
+                                                        let time= diff_number/1000;
+                                                        if( parseInt(time=time/60)<=0){
+                                                            return 3
+                                                        }else if (parseInt(time)>=0 && parseInt(time)<=15){
+                                                            return 2
+                                                        } else {
+                                                            
+                                                            return 1
+                                                            
+                                                        }
+                                                }
+                                                %>
+                                                <% let i =1 ;  %>
+                                                <% event.forEach(element => { %>
+                                                <% let date = new Date(element.date_timestemp) %>
+                                                <% let date15 = new Date(date);%>
+                                                <%  date15.setMinutes(date.getMinutes()+15)%>
+                                                <tr>
+                                                    <td class="align-middle"><%= i++  %> </td>
+                                                    <td class="align-middle locksize" ><%= element.room  %> </td>
+                                                    <td class="align-middle">
+                                                        <%= date.getDate().toFixed()+"-"+ (date.getMonth()+1)+"-"+date.getFullYear()+" "+  (date.getHours()<10?'0':'') + date.getHours()  +':'+(date.getMinutes()<10?'0':'') + date.getMinutes() %>
+                                                        <br>-<br>
+                                                        <%= date15.getDate()+"-"+ (date15.getMonth()+1)+"-"+date15.getFullYear()+" "+ (date15.getHours()<10?'0':'') + date15.getHours()+':'+(date15.getMinutes()<10?'0':'') + date15.getMinutes() %>
+                                                    </td>
+                                                    <td class="align-middle"><%= element.project_name %> </td>
+                                                    <td class="align-middle"><%= element.name %> </td>
+                                                    <td class="align-middle">
+                                                    
+                                                        <% let datenow  = new Date() %>
+                                                        <% let diffdate  =date - datenow   %>
+
+                                                         
+                                                        <%- difftime(diffdate) %> 
+                                                    </td>
+                                                    <td class="align-middle">
+                                                        <%  if(getstatus(diffdate)==1){%> 
+                                                        <button type="button" class="btn btn-primary" data-toggle="modal"
+                                                        data-target="#eventtime_edit" data-time="<%= element.date_timestemp  %>" data-details="<%= element.room  %>" data-eventid="<%= element.event_id %>" id="conf-event"  ><i class="fas fa-cog"></i></button>
+                                                        <button type="button" class="btn btn-danger" data-eventid="<%= element.event_id %>"  id="delete_event"><i class="fas fa-trash" ></i></button>
+                                                        <%}else if(getstatus(diffdate)==2 ||   getstatus(diffdate)==3){  %> 
+                                                          <%  if(element.project_name!="วันเวลายังไม่ถูกจอง"){%> 
+                                                            <button type="button" class="btn btn-info" data-toggle="modal"
+                                                            data-target="#student_detail" id="show_student" data-project="<%=element.id_project %>"><i class="fas fa-users"></i></button>
+                                                        <% }}  %> 
+                                                    </td>
+                                                </tr>
+                                                <% }) %>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- content-wrapper ends -->
+    <div class="modal fade" id="eventtime_add" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">เพิ่มวันเวลา</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="">คำอธิบายในการสอบ</label>
+                        <input type="text" class="form-control" id="detail_add" placeholder="คำอธิบาย">
+
+                        <div class="form-group">
+                            <label for="">วันเวลาเปิดสอบ</label>
+                            <input class="form-control" placeholder="เลือกวันเวลาสอบ" id="select_time">
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">ปิด</button>
+                        <button type="button" class="btn btn-primary" id="save_event_time">บันทึก</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="eventtime_edit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">แก้ไขวันเวลา</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="">คำอธิบายในการสอบ</label>
+                    <input type="text" class="form-control" id="detail_edit" placeholder="คำอธิบาย">
+
+                    <div class="form-group">
+                        <label for="">วันเวลาเปิดสอบ</label>
+                        <input class="form-control" placeholder="เลือกวันเวลาสอบ" id="select_time_edit">
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">ปิด</button>
+                    <button type="button" class="btn btn-primary" id="edit_event_time">แก้ไข</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    <!-- partial:partials/_footer.html -->
+    <%- include('../../footter') %> 
+    <!-- partial -->
+    </div>
+    <!-- main-panel ends -->
+    </div>
+    <!-- page-body-wrapper ends -->
+    </div>
+    <div class="modal fade bd-example-modal-lg" id="student_detail" tabindex="-1" role="dialog"
+    aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">ข้อมูลนักศึกษา</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive ">
+                    <table class="table table-striped text-center">
+                        <thead>
+                            <tr>
+                                <th>รหัสนักศึกษา</th>
+                                <th>ชื่อ</th>
+                                <th>นามสกุล</th>
+                            </tr>
+                        </thead>
+                        <tbody id="show_details">
+                            
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">ปิด</button>
+            
+            </div>
+        </div>
+    </div>
+</div>
+    <!-- container-scroller -->
+    <!-- base:js -->
+    <script src="vendors/base/vendor.bundle.base.js"></script>
+    <!-- endinject -->
+    <!-- Plugin js for this page-->
+    <!-- End plugin js for this page-->
+    <!-- inject:js -->
+    <script src="js/template.js"></script>
+    <!-- endinject -->
+    <!-- plugin js for this page -->
+
+    <!-- Font Awesome -->
+
+    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+
+    <script src="/vendors/typeahead.js/typeahead.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <%- 
+	include("../setting")
+	 %>  
+    <!-- End custom js for this page-->
+</body>
+
+</html>

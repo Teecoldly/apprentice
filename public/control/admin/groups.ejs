@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title><%- include("../../title.ejs") %> </title>
+    <!-- base:css -->
+    <link rel="stylesheet" href="/vendors/mdi/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="/vendors/base/vendor.bundle.base.css">
+    <!-- endinject -->
+    <!-- plugin css for this page -->
+    <!-- End plugin css for this page -->
+    <!-- inject:css -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- endinject -->
+
+    <link rel="shortcut icon" href="/images/favicon.png" />
+    <link href="/fonts/fontawesome-free-5.13.0-web/css/fontawesome.css" rel="stylesheet">
+    <link href="/fonts/fontawesome-free-5.13.0-web/css/brands.css" rel="stylesheet">
+    <link href="/fonts/fontawesome-free-5.13.0-web/css/solid.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
+
+    <script src="/js/jquery.js"></script>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+
+
+
+    <style>
+        .sale-red:after {
+            content: '';
+            height: 5px;
+            width: 100%;
+            border-radius: 0 0 6px 6px;
+            background-color: red;
+            position: absolute;
+            left: 0;
+            bottom: 0;
+        }
+
+        .sale-pink:after {
+            content: '';
+            height: 5px;
+            width: 100%;
+            border-radius: 0 0 6px 6px;
+            background-color: pink;
+            position: absolute;
+            left: 0;
+            bottom: 0;
+        }
+
+        .sale-green:after {
+            content: '';
+            height: 5px;
+            width: 100%;
+            border-radius: 0 0 6px 6px;
+            background-color: green;
+            position: absolute;
+            left: 0;
+            bottom: 0;
+        }
+
+        .sale-black:after {
+            content: '';
+            height: 5px;
+            width: 100%;
+            border-radius: 0 0 6px 6px;
+            background-color: black;
+            position: absolute;
+            left: 0;
+            bottom: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-scroller">
+
+        <!-- partial:partials/_horizontal-navbar.html -->
+        <div class="horizontal-menu">
+            <nav class="navbar top-navbar col-lg-12 col-12 p-0">
+                <div class="container-fluid">
+                    <div class="navbar-menu-wrapper d-flex align-items-center justify-content-between">
+                        <ul class="navbar-nav navbar-nav-left">
+                            <div
+                                class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
+                            	<a class="navbar-brand brand-logo" href="/">CRS System</a>
+								<a class="navbar-brand brand-logo-mini" href="/"> CRS System</a>
+                            </div>
+                        </ul>
+                        <%- include('../../nav_user',{name:name}) %>
+
+                        <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button"
+                            data-toggle="horizontal-menu-toggle">
+                            <span class="mdi mdi-menu"></span>
+                        </button>
+                    </div>
+                </div>
+            </nav>
+            <nav class="bottom-navbar">
+                <%- include('../../menubar',{level:level}) %> 
+            </nav>
+        </div>
+        <!-- partial -->
+        <div class="container-fluid page-body-wrapper">
+            <div class="main-panel">
+                <div class="content-wrapper">
+                    <div class="row mt-3">
+                        <div class="col-lg-12 grid-margin stretch-card">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4 class="card-title">กรรมการ
+                                        <div class="float-right mr-auto">
+
+                                            <button type="button" class="btn btn-info" data-toggle="modal"
+                                                data-target="#Director_add" id="Director_open"><i
+                                                    class="fas fa-user-plus"></i></button>
+                                        </div>
+                                    </h4>
+
+                                    <p class="card-description">
+                                        จัดการกรรมการ
+                                    </p>
+                                    <div class="table-responsive">
+                                        <table class="table table-striped text-center " id="professor-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>
+                                                        กลุ่มที่
+                                                    </th>
+                                                    <th>
+                                                        ชื่อกรรมการคนที่ 1
+                                                    </th>
+                                                    <th>
+                                                        ชื่อกรรมการคนที่ 2
+                                                    </th>
+                                                    <th>
+                                                        ชื่อกรรมการคนที่ 3
+                                                    </th>
+                                                    <th>
+                                                        เครื่องมือ
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <% group.forEach(element => { %>
+                                                <tr>
+                                                    <td class="align-middle"><%= element.group_id  %> </td>
+                                                    <td class="align-middle"><%=  element.dir_1 %> </td>
+                                                    <td class="align-middle"><%=  element.dir_2 %> </td>
+                                                    <td class="align-middle"><%=  element.dir_3 %> </td>
+                                                    <td class="align-middle"><button type="button"
+                                                            class="btn btn-primary" data-toggle="modal"
+                                                            data-target="#Director_edit" id="Director_edit_show"
+                                                            data-groupid="<%= element.group_id %>"
+                                                            data-dir_1="<%= element.Director_1 %>"
+                                                            data-dir_2="<%= element.Director_2 %>"
+                                                            data-dir_3="<%= element.Director_3 %>"><i
+                                                                class="fas fa-cog"></i></button></td>
+                                                </tr>
+                                                <% }) %>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col-lg-12 grid-margin stretch-card">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4 class="card-title ">กลุ่มโครงการ
+                                        <div class="float-right mr-auto">
+                                            <button type="button" class="btn btn-info" id="radon_group"><i
+                                                    class="fas fa-random"></i>
+                                            </button>
+                                        </div>
+                                    </h4>
+
+                                    <p class="card-description">
+                                        กลุ่มโครงการการสอบกลุ่มกรรมการ
+                                    </p>
+                                    <div class="table-responsive">
+                                        <table class="table table-striped text-center " id="project_group">
+                                            <thead>
+                                                <tr>
+                                                    <th>
+                                                        กลุ่มที่
+                                                    </th>
+                                                    <th>
+                                                        ชื่อโครงการ
+                                                    </th>
+                                                    <th>
+                                                        ชื่อที่ปรึกษา
+                                                    </th>
+                                                    <th>
+                                                        กลุ่มคณะกรรมการ
+                                                    </th>
+                                                    <th>
+                                                        เครื่องมือ
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <%  let i = 1 ;%>
+                                                <% group_student.forEach(element => { %>
+                                                <tr>
+                                                    <td class="align-middle"><%= i++; %> </td>
+                                                    <td class="align-middle"><%=  element.project_name %> </td>
+                                                    <td class="align-middle"><%=  element.name %> </td>
+                                                    <td class="align-middle"><%=  element.gruop %> </td>
+                                                    <td class="align-middle">
+                                                        <button type="button" class="btn btn-danger" data-toggle="modal"
+                                                            data-target="#group_edit"
+                                                            data-project="<%= element.project_id %>"
+                                                            data-groupid="<%= element.gruop %>" id="open_edit_group">
+                                                            <i class="fas fa-cog"></i></button>
+                                                    </td>
+                                                </tr>
+                                                <% }) %>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- content-wrapper ends -->
+        <!-- partial:partials/_footer.html -->
+        <%- include('../../footter') %> 
+        <!-- partial -->
+    </div>
+    <!-- main-panel ends -->
+    </div>
+    <!-- page-body-wrapper ends -->
+    </div>
+    <div class="modal fade" id="Director_add" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">เพิ่มกลุ่มกรรมการ</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="professor_1">กรรมการ คนที่ 1 : </label>
+                        <select class="form-control" id="professor_1" style="width: 100%">
+
+                            <%  professor_data.forEach(element => { %>
+                            <option value="<%= element.user_id %>"><%= element.name+" "+element.lastname %> </option>
+                            <% }) %>
+
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="professor_2">กรรมการ คนที่ 2 : </label>
+                        <select class="form-control" id="professor_2" style="width: 100%">
+                            <%  professor_data.forEach(element => { %>
+                            <option value="<%= element.user_id %>"><%= element.name+" "+element.lastname %> </option>
+                            <% }) %>
+
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="professor_3">กรรมการ คนที่ 3 : </label>
+                        <select class="form-control" id="professor_3" style="width: 100%">
+                            <%  professor_data.forEach(element => { %>
+                            <option value="<%= element.user_id %>"><%= element.name+" "+element.lastname %> </option>
+                            <% }) %>
+
+                        </select>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">ปิด</button>
+                    <button type="button" class="btn btn-primary" id="save_group">บันทึก</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="Director_edit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">เพิ่มกลุ่มกรรมการ</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="professor_1">กรรมการ คนที่ 1 : </label>
+                        <select class="form-control" id="professor_edit_1" style="width: 100%">
+
+                            <%  professor_data.forEach(element => { %>
+                            <option value="<%= element.user_id %>"><%= element.name+" "+element.lastname %> </option>
+                            <% }) %>
+
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="professor_2">กรรมการ คนที่ 2 : </label>
+                        <select class="form-control" id="professor_edit_2" style="width: 100%">
+                            <%  professor_data.forEach(element => { %>
+                            <option value="<%= element.user_id %>"><%= element.name+" "+element.lastname %> </option>
+                            <% }) %>
+
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="professor_3">กรรมการ คนที่ 3 : </label>
+                        <select class="form-control" id="professor_edit_3" style="width: 100%">
+                            <%  professor_data.forEach(element => { %>
+                            <option value="<%= element.user_id %>"><%= element.name+" "+element.lastname %> </option>
+                            <% }) %>
+
+                        </select>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">ปิด</button>
+                    <button type="button" class="btn btn-primary" id="save_edit_group">บันทึก</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <div class="modal fade" id="group_edit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">แก้ไขกลุ่มกรรมการสอบ</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="professor_2">กรรมการ : </label>
+                        <select id="group_edit_select" style="width: 100%">
+                            <% group.forEach(element => { %>
+                            <option value="<%=  element.group_id  %>">กลุ่มที่ : <%=  element.group_id  %> </option>
+                            <% }) %>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">ปิด</button>
+                    <button type="button" class="btn btn-primary" id="group_edit_save">แก้ไข</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <!-- container-scroller -->
+    <!-- base:js -->
+    <script src="vendors/base/vendor.bundle.base.js"></script>
+    <!-- endinject -->
+    <!-- Plugin js for this page-->
+    <!-- End plugin js for this page-->
+    <!-- inject:js -->
+    <script src="js/template.js"></script>
+    <!-- endinject -->
+    <!-- plugin js for this page -->
+
+    <!-- Font Awesome -->
+
+    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+
+    <script src="/vendors/typeahead.js/typeahead.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+    <script src="/control/admin/groups.js"></script>
+    <%- 
+	include("../setting")
+	 %>  
+    <!-- End custom js for this page-->
+</body>
+
+</html>
